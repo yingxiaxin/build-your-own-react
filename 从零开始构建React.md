@@ -1082,39 +1082,23 @@ requestIdleCallback(workLoop);
  * }
  */
 function performUnitOfWork(fiber) {
-    // TODO 创建DOM
-    // TODO 创建新的fibers
-    // TODO 返回下一个工作单元
-
-    // 判断是否为函数组件
-    const isFunctionComponent = (fiber.type instanceof Function);
-    if (isFunctionComponent) {
-        updateFunctionComponent(fiber);
-    } else {
-        updateHostComponent(fiber);
+  const isFunctionComponent =
+    fiber.type instanceof Function
+  if (isFunctionComponent) {
+    updateFunctionComponent(fiber)
+  } else {
+    updateHostComponent(fiber)
+  }
+  if (fiber.child) {
+    return fiber.child
+  }
+  let nextFiber = fiber
+  while (nextFiber) {
+    if (nextFiber.sibling) {
+      return nextFiber.sibling
     }
-
-    // 1. 创建dom
-    if (!fiber.dom) {
-        fiber.dom = createDom(fiber);
-    }
-
-    // 2. 创建新的fiber
-    const elements = fiber.props.children;
-    reconcileChildren(fiber, elements);
-
-    // 3. 返回下一个fiber
-    // 先尝试子元素、再尝试兄弟元素、再尝试uncle元素
-    if (fiber.child) {
-        return fiber.child;
-    }
-    let nextFiber = fiber;
-    while (nextFiber) {
-        if (nextFiber.sibling) {
-            return nextFiber.sibling;
-        }
-        nextFiber = nextFiber.parent;
-    }
+    nextFiber = nextFiber.parent
+  }
 }
 
 let wipFiber = null;
