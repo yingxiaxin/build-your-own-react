@@ -291,7 +291,7 @@ function performUnitOfWork(nextUnitOfWork) {
 每个React元素对应一个fiber, 每个fiber就是一个工作单元.
 
 Fiber树的样子:
-![](./微信截图_20200515160430.png)
+![](./assets/微信截图_20200515160430.png)
 
 每一个fiber对象, 包含的属性有:
 
